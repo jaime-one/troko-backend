@@ -1,0 +1,39 @@
+name: Deploy to Cloud Run on push to main
+
+on:
+  push:
+    branches:
+      - main
+
+# Necesario para Workload Identity Federation (autenticación sin llaves):
+# 'id-token: write' permite a la action pedir el token OIDC que GCP valida.
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # 1) Autenticarse contra Google Cloud SIN llave, vía la confianza federada.
+      - id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          project_id: mapapp-405311
+          workload_identity_provider: projects/799650660364/locations/global/workloadIdentityPools/github-pool/providers/github-provider
+          service_account: github-deployer@mapapp-405311.iam.gserviceaccount.com
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      # 2) Construir la imagen (desde el Dockerfile) y desplegar a Cloud Run.
+      #    Sin --set-env-vars ni --service-account: se PRESERVAN los que ya
+      #    tiene el servicio (ALLOWED_ORIGINS, GOOGLE_SHEET_ID, runtime SA, etc.).
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy troko-api \
+            --source . \
+            --region southamerica-west1 \
+            --project mapapp-405311 \
+            --quiet

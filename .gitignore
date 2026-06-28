@@ -1,0 +1,19 @@
+# Credenciales / secretos — NUNCA commitear
+*-sa-key.json
+*-key.json
+*credentials*.json
+*service-account*.json
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+env/
+venv/
+.venv/
+
+# Archivos del entorno de IA (no del proyecto)
+.agents/
+skills-lock.json
