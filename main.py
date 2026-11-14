@@ -48,7 +48,7 @@ class Product(BaseModel):
     nombre: str = Field(..., examples=["Medallero Troko 2 Barras"])
     precio: int = Field(..., description="Precio base en CLP", examples=[24990])
     descuento: int = Field(..., description="Descuento en %", examples=[15])
-    precioFinal: int = Field(..., description="Precio con descuento aplicado (CLP)", examples=[21242])
+    precioFinal: int = Field(..., description="Precio con descuento aplicado y redondeado a X990 (CLP)", examples=[21990])
     descripcion: str
     categoria: str = Field(..., examples=["Medalleros"])
     stock: int = Field(..., examples=[12])

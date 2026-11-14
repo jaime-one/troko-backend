@@ -19,3 +19,8 @@ venv/
 .git/
 .gitignore
 .DS_Store
+
+# No hacen falta en la imagen
+.github/
+.claude/
+.agents/
