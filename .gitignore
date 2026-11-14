@@ -17,3 +17,9 @@ venv/
 # Archivos del entorno de IA (no del proyecto)
 .agents/
 skills-lock.json
+
+# Notebooks de prueba local (pueden contener rutas, IDs u outputs sensibles)
+*.ipynb
+
+# macOS
+.DS_Store

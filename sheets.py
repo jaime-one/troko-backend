@@ -36,6 +36,14 @@ def _to_int(value, default=0):
         return default
 
 
+def _redondear_990(monto):
+    """
+    Deja los últimos 3 dígitos en 990 dentro del mismo millar.
+    Ej: 23543 → 23990, 23995 → 23990, 750 → 990.
+    """
+    return (monto // 1000) * 1000 + 990
+
+
 def _normalize_carpeta(imagen_url):
     """
     La hoja guarda 'troko-content/imagenes-pagina-web/<producto>'.
@@ -81,7 +89,10 @@ def fetch_products():
                 "descuento": descuento,
                 # Precio final calculado en el servidor (regla de negocio): el
                 # frontend nunca debe recalcular precio/stock por seguridad.
-                "precioFinal": precio - round(precio * descuento / 100),
+                # Se aplica el descuento y luego se redondea a X990.
+                "precioFinal": _redondear_990(
+                    precio - round(precio * descuento / 100)
+                ),
                 "descripcion": data.get("descripcion", "").strip(),
                 "categoria": data.get("categoria", "").strip(),
                 "stock": stock,
